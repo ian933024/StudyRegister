@@ -2,10 +2,10 @@
 const express = require('express')
 var fs = require('fs')
 var linebot = require('linebot');
-var today = new Date();
-if (today.getMilliseconds() == 10) {
-  console.log(today.getHours())
-}
+var d = new Date();
+var t = d.getHours();
+var mis
+mis = 3600000 * (23 - t)
 
 
 fs.writeFile('./public/namelist.json', "[]", function () {
@@ -72,12 +72,15 @@ function de(de) {
 
   }
 }
+setInterval(function() {de("all")},mis)
+
 
 var privateKey = fs.readFileSync('ssl/private.key');
 var certificate = fs.readFileSync('ssl/certificate.crt');
 var credentials = { key: privateKey, cert: certificate };
 
 var https = require('https');
+const ms = require('ms');
 
 setTimeout(() => {
   app.post("/pp", function (req, res) {

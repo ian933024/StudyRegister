@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-        <script>
-            function DE(obj){
-                $.ajax({
-                    type: "POST",
-                    // async: false,
-                    url: "https://139.162.36.172/de",
-                    data: {"mode":obj}
-            })}
-            console.log(obj)
-        </script>
-    </head>
-    <body>
-        <h1>留晚登記網站手動設定區</h1>
-        <button onclick="DE('namelist')">刪除名單</button>
-        <button onclick="DE('cr')">刪除教室</button>
-        <button onclick="DE('all')">全部刪除</button>
-    </body>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        function DE(obj) {
+            $.ajax({
+                type: "POST",
+                // async: false,
+                url: "https://139.162.36.172/de",
+                data: { "mode": obj }
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>留晚登記網站手動設定區</h1>
+    <button onclick="DE('namelist')">刪除名單</button>
+    <button onclick="DE('cr')">刪除教室</button>
+    <button onclick="DE('all')">全部刪除</button>
+</body>
+
 </html>
