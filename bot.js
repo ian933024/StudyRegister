@@ -4,8 +4,11 @@ var fs = require('fs')
 var linebot = require('linebot');
 var d = new Date();
 var t = d.getHours();
-var mis
-mis = 3600000 * (23 - t)
+
+var mis = 3600000 * (23 - t)
+setTimeout(() => {
+  alarm()
+}, mis);
 
 
 fs.writeFile('./public/namelist.json', "[]", function () {
@@ -72,7 +75,10 @@ function de(de) {
 
   }
 }
-setInterval(function() {de("all")},mis)
+
+function alarm() {
+  setInterval(function () { de("all") }, 86400000)
+}
 
 
 var privateKey = fs.readFileSync('ssl/private.key');
