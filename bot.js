@@ -8,7 +8,7 @@ var t = d.getHours();
 var mis = 3600000 * (23 - t)
 setTimeout(() => {
   alarm()
-},mis);
+}, mis);
 
 
 fs.writeFile('./public/namelist.json', "[]", function () {
@@ -76,8 +76,8 @@ function de(de) {
   }
 }
 
-function alarm(){
-  setInterval(function() {de("all")},86400000)
+function alarm() {
+  setInterval(function () { de("all") }, 86400000)
 }
 
 
