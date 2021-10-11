@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>留晚登記結果</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css" />
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        var four = []
+        var five = []
+
+        function load() {
+            var input = document.getElementById("input")
+            input.value = ""
+            var time = new Date()
+            $.ajax({
+                method: 'GET',
+                url: './cr.txt?t='+time,
+                success: function (response) {
+                    if(response!=""){
+                        change(response)
+                    console.log(response);
+                    }else{
+                        document.getElementById("hd").style.visibility = "visible"
+                    }
+                }
+            })
+
+        }
+
+        function getJsonLength(json) {
+            var jsonLength = 0;
+            for (var i in json) {
+                jsonLength++;
+            }
+            return jsonLength;
+        }
+
+        $.ajax({
+            method: 'GET',
+            url: './namelist.json',
+            success: function (response) {
+                myArray = response
+                seperate_and_add(myArray)
+            }
+        })
+
+        function seperate_and_add(data) {
+            list = document.getElementById("list")
+            for (var i = 0; i < getJsonLength(data); i++) {
+                if (data[i]["time"] == 5) {
+                    five.push(data[i]["name"])
+                    var row = `<li class="list-group-item" id="l1">${data[i]["name"]}<span class="badge bg-primary" id="sp1">五點下課</span></li>`
+                } else if (data[i]["time"] == 4) {
+                    four.push(data[i]["name"])
+                    var row = `<li class="list-group-item" id="l1">${data[i]["name"]}<span class="badge bg-primary" id="sp1"></span></li>`
+                }
+                list.innerHTML += row
+            }
+        }
+
+        function change(cr) {
+            var showTodayClass = `<h4 class="card-title col" id="tdc">今天在：${cr}教室</h4>`
+            classroom.innerHTML += showTodayClass
+            document.getElementById("hd").style.visibility = "hidden"
+        }
+
+        function which() {
+            var input = document.getElementById("input")
+            var todayClass = input.value
+            // console.log(todayClass)
+            $.ajax({
+                type: "POST",
+                // async: false,
+                url: "https://139.162.36.172/cr",
+                data: { "class": todayClass }
+            })
+            load()
+        }
+        function resend_classroom(){
+            $.ajax({
+                type: "POST",
+                // async: false,
+                url: "https://139.162.36.172/cr",
+                data: { "class": "" }
+            })
+            load()
+
+        }
+
+    </script>
+
+</head>
+
+<body class="text-center" onload="load()">
+    <main class="form-signin">
+        <img class="mb-0" src="./book.png" width="250" height="198" />
+        <h1 style="padding-top: 10px;">留晚登記結果</h1>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">今天要留晚的人有：</h4>
+                <ul class="list-group list-group-flush" id="list">
+                </ul>
+            </div>
+            <div id="classroom" class="row">
+                <!-- <h4 class="card-title">今天在：116教室</h4> -->
+            </div>
+        </div>
+        <div style="visibility: none;" id="hd">
+            <h6>請四點下課的人幫大家佔位子！</h6>
+            <div class="row g-3" id="which">
+                <div class="col-auto ">
+                    <input type="test" class="form-control form-control-lg" style="max-width: 16rem;" id="input"
+                        placeholder="佔到哪一班？">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3 btn-lg" onclick="which()">確認</button>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+</body>
+
+</html>
